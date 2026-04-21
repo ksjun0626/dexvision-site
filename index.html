@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DEXVision.io — From Losing Trades To $50K Months In 90 Days</title>
+<meta name="description" content="Done-For-You trading blueprint. We make you a profitable perpetuals trader in 90 days or you don't pay." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ['Inter', 'sans-serif'],
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['Inter', 'monospace'],
+        },
+        colors: {
+          ink: '#0A0B0C',
+          panel: '#141416',
+          panel2: '#1C1C1E',
+          border: '#2A2A2C',
+          borderHi: '#3F3F42',
+          mint: '#FFFFFF',
+          mintDim: '#A8A8A8',
+          gold: '#C8C8C8',
+          crimson: '#8E8E8E',
+          gain: '#10F5A7',
+          loss: '#FF4747',
+          off: '#F4F3EE',
+          dim: '#8B8B88',
+        },
+      },
+    },
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  /* Offset anchor targets so the sticky nav doesn't cover them on scroll */
+  section[id], [id="form"], [id="hero"], [id="what"], [id="inside"],
+  [id="results"], [id="faq"] {
+    scroll-margin-top: 80px;
+  }
+  body {
+    background: linear-gradient(180deg, #0A0B0C 0%, #0E0F10 50%, #0A0B0C 100%);
+    color: #F4F3EE;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'ss01', 'cv11';
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid chart background on hero */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .grid-bg-fine {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Radial glow */
+  .mint-glow {
+    background: radial-gradient(800px 500px at 50% 0%, rgba(255,255,255,0.08), transparent 65%),
+                radial-gradient(400px 300px at 50% 100%, rgba(255,255,255,0.04), transparent 70%);
+  }
+
+  /* Inter for display - tight tracking + bold weight instead of serif flourish */
+  .display { font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.035em; }
+  .display-i { font-family: 'Inter', sans-serif; font-style: italic; font-weight: 700; letter-spacing: -0.04em; }
+
+  /* Ticker tape */
+  .ticker-track {
+    display: flex;
+    gap: 3rem;
+    animation: ticker 45s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Live dot pulse */
+  .pulse-dot {
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,255,255,0.45); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+  }
+
+  /* Scanline/candlestick decorative */
+  .candle {
+    animation: candleGrow 0.8s ease-out forwards;
+    transform-origin: bottom;
+  }
+  @keyframes candleGrow {
+    from { transform: scaleY(0); opacity: 0; }
+    to { transform: scaleY(1); opacity: 1; }
+  }
+
+  /* Number count shimmer */
+  .num-shine {
+    background: linear-gradient(90deg, #F4F3EE 0%, #FFFFFF 50%, #F4F3EE 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 4s ease-in-out infinite;
+  }
+  @keyframes shine {
+    0%, 100% { background-position: 200% 0; }
+    50% { background-position: -200% 0; }
+  }
+
+  /* Reveal on load */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: reveal 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FAQ chevron */
+  details[open] .faq-chev { transform: rotate(45deg); }
+  .faq-chev { transition: transform 0.3s ease; }
+
+  /* Noise overlay */
+  .noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Scroll indicator */
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(180deg, transparent, #FFFFFF, transparent);
+    animation: scrollLine 2.5s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { transform: translateY(-20px); opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  /* Button shine */
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transition: left 0.6s ease;
+  }
+  .btn-primary:hover::after { left: 100%; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
+
+  /* Underline link */
+  .underline-slide {
+    position: relative;
+  }
+  .underline-slide::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease;
+  }
+  .underline-slide:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Card hover */
+  .feat-card {
+    transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .feat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.5);
+    background: #13171A;
+  }
+
+  /* Asymmetric section headers */
+  .section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+</style>
+</head>
+<body class="noise relative">
+
+<!-- Top Ticker Tape -->
+<div class="bg-ink border-b border-border overflow-hidden relative">
+  <div class="flex items-center py-2.5 text-[11px] font-mono">
+    <div class="flex items-center gap-2 px-4 border-r border-border shrink-0">
+      <span class="w-1.5 h-1.5 rounded-full bg-mint pulse-dot"></span>
+      <span class="text-mint tracking-widest">LIVE</span>
+    </div>
+    <div class="ticker-track text-dim">
+      <span>BTC/USD <span class="text-gain">+2.47%</span></span>
+      <span>ETH/USD <span class="text-gain">+4.12%</span></span>
+      <span>SOL/USD <span class="text-loss">−0.88%</span></span>
+      <span>STUDENT P&L THIS WEEK <span class="text-gain">+$184,302</span></span>
+      <span>WIN RATE (90D AVG) <span class="text-mint">68.4%</span></span>
+      <span>AVG R:R <span class="text-off">2.8</span></span>
+      <span>ACTIVE MEMBERS <span class="text-off">412</span></span>
+      <span>FUNDED ACCOUNTS PASSED <span class="text-mint">97</span></span>
+      <!-- Duplicate for seamless loop -->
+      <span>BTC/USD <span class="text-gain">+2.47%</span></span>
+      <span>ETH/USD <span class="text-gain">+4.12%</span></span>
+      <span>SOL/USD <span class="text-loss">−0.88%</span></span>
+      <span>STUDENT P&L THIS WEEK <span class="text-gain">+$184,302</span></span>
+      <span>WIN RATE (90D AVG) <span class="text-mint">68.4%</span></span>
+      <span>AVG R:R <span class="text-off">2.8</span></span>
+      <span>ACTIVE MEMBERS <span class="text-off">412</span></span>
+      <span>FUNDED ACCOUNTS PASSED <span class="text-mint">97</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="sticky top-0 z-50 bg-black border-b border-border">
+  <div class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
+    <a href="#hero" class="flex items-center gap-2.5">
+      <img src="data:image/png;base64,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" alt="DEXVision" class="h-11 w-11" />
+      <span class="font-serif text-xl tracking-tight text-off">DEXVision<span class="text-mint">.io</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-dim">
+    </div>
+    <a href="#form" class="btn-primary bg-mint text-ink font-semibold text-sm px-5 py-2.5 rounded-md tracking-wide">
+      APPLY NOW →
+    </a>
+  </div>
+</nav>
+
+<!-- ============ HERO (with embedded form) ============ -->
+<section id="hero" class="relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg"></div>
+  <div class="absolute inset-0 mint-glow"></div>
+
+  <div class="relative max-w-4xl mx-auto px-6 md:px-10 pt-10 pb-20 md:pt-14 md:pb-28">
+
+    <!-- TOP: Centered Headline -->
+    <div id="form" class="text-center">
+      <div class="flex items-center justify-center gap-3 mb-5 reveal" style="animation-delay:0.05s">
+        <span class="w-2 h-2 rounded-full bg-mint pulse-dot"></span>
+        <span class="section-label">90-Day Done-For-You Protocol</span>
+      </div>
+
+      <h1 class="display text-3xl sm:text-4xl md:text-5xl leading-[1.1] reveal" style="animation-delay:0.15s">
+        From losing trades to a consistent
+        <span class="display-i text-mint">$50K / month</span>
+        in only 90 days.
+      </h1>
+
+      <p class="mt-5 text-base md:text-lg text-dim max-w-xl mx-auto reveal" style="animation-delay:0.3s">
+        We turn beginners into profitable perpetuals traders
+        <span class="text-off">— or you don't pay a cent.</span>
+      </p>
+
+      <!-- Trust row -->
+      <div class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm reveal" style="animation-delay:0.4s">
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 10l3 3 7-7" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="text-off">412 active traders</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 10l3 3 7-7" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="text-off">68.4% avg win rate</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 10l3 3 7-7" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="text-off">$2.4M verified PnL in 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM: Centered GHL Form -->
+    <div class="mt-10 md:mt-12 max-w-2xl mx-auto reveal" style="animation-delay:0.5s">
+      <div class="bg-panel border border-borderHi rounded-2xl p-3 md:p-4 shadow-2xl shadow-black/40">
+        <iframe
+          src="https://api.leadconnectorhq.com/widget/form/OPf5qQtFsYrIfs90V6QJ"
+          style="width:100%;height:620px;border:none;border-radius:8px;display:block;"
+          id="inline-OPf5qQtFsYrIfs90V6QJ"
+          data-layout="{'id':'INLINE'}"
+          data-trigger-type="alwaysShow"
+          data-trigger-value=""
+          data-activation-type="alwaysActivated"
+          data-activation-value=""
+          data-deactivation-type="neverDeactivate"
+          data-deactivation-value=""
+          data-form-name="Lead Opt In Form"
+          data-height="620"
+          data-layout-iframe-id="inline-OPf5qQtFsYrIfs90V6QJ"
+          data-form-id="OPf5qQtFsYrIfs90V6QJ"
+          title="Lead Opt In Form">
+        </iframe>
+      </div>
+      <div class="text-center font-mono text-[10px] text-dim mt-4 tracking-wider">
+        NO SPAM · NO CARD REQUIRED · APPLICATION ONLY
+      </div>
+    </div>
+
+    <!-- Live stats row (below fold) -->
+    <div class="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-px bg-border border border-border rounded-lg overflow-hidden reveal" style="animation-delay:0.55s">
+      <div class="bg-panel p-6">
+        <div class="text-dim font-mono text-[10px] tracking-widest mb-2">STUDENT P&amp;L · 2025</div>
+        <div class="font-serif text-3xl md:text-4xl">$<span class="num-shine">2.4M</span></div>
+        <div class="text-mint text-xs font-mono mt-1">▲ verified PnL</div>
+      </div>
+      <div class="bg-panel p-6">
+        <div class="text-dim font-mono text-[10px] tracking-widest mb-2">AVG WIN RATE</div>
+        <div class="font-serif text-3xl md:text-4xl">68.4<span class="text-mint">%</span></div>
+        <div class="text-dim text-xs font-mono mt-1">across 412 traders</div>
+      </div>
+      <div class="bg-panel p-6">
+        <div class="text-dim font-mono text-[10px] tracking-widest mb-2">DAYS TO BREAK-EVEN</div>
+        <div class="font-serif text-3xl md:text-4xl">27<span class="text-dim text-xl">d</span></div>
+        <div class="text-dim text-xs font-mono mt-1">median student</div>
+      </div>
+      <div class="bg-panel p-6">
+        <div class="text-dim font-mono text-[10px] tracking-widest mb-2">FUNDED PASSED</div>
+        <div class="font-serif text-3xl md:text-4xl">97<span class="text-dim text-xl">/150</span></div>
+        <div class="text-mint text-xs font-mono mt-1">64.6% pass rate</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+</section>
+
+<!-- ============ VALUE PROP ============ -->
+<section id="what" class="relative py-28 md:py-40 border-t border-border">
+  <div class="max-w-7xl mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-12 gap-12 items-start">
+      <div class="md:col-span-5">
+        <div class="section-label mb-6">[ 01 / The Problem ]</div>
+        <h2 class="display text-4xl md:text-6xl leading-tight">
+          We help you trade like a
+          <span class="display-i text-mint">prop-firm desk,</span>
+          without 5 years of blown accounts.
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 space-y-6">
+        <p class="text-lg text-dim leading-relaxed">
+          97% of retail traders lose money. Not because they're stupid — because they're
+          trading in the dark: no edge, no system, no risk model. They read 12 YouTube
+          videos and expect to compete with desks running algos and institutional flow.
+        </p>
+        <p class="text-lg text-dim leading-relaxed">
+          DEXVision is the opposite of that. We hand you the <span class="text-off">exact strategy stack</span>,
+          the <span class="text-off">risk framework</span>, and the <span class="text-off">live execution infrastructure</span> our desk
+          uses to pull clean 6-figure months trading perpetuals on decentralized exchanges.
+        </p>
+        <div class="pt-4 flex flex-wrap gap-3 font-mono text-xs">
+          <span class="px-3 py-1.5 border border-border rounded-full text-dim">Liquidation maps</span>
+          <span class="px-3 py-1.5 border border-border rounded-full text-dim">Funding-rate arbitrage</span>
+          <span class="px-3 py-1.5 border border-border rounded-full text-dim">Order-flow reading</span>
+          <span class="px-3 py-1.5 border border-border rounded-full text-dim">Multi-TF confluence</span>
+          <span class="px-3 py-1.5 border border-border rounded-full text-dim">DEX execution</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE GRID ============ -->
+<section id="inside" class="relative py-28 border-t border-border bg-ink">
+  <div class="absolute inset-0 grid-bg-fine opacity-50"></div>
+  <div class="relative max-w-7xl mx-auto px-6 md:px-10">
+    <div class="flex items-end justify-between mb-16 flex-wrap gap-6">
+      <div>
+        <div class="section-label mb-4">[ 02 / What's Inside ]</div>
+        <h2 class="display text-4xl md:text-6xl max-w-3xl leading-tight">
+          Everything the top 1% of perp traders don't post on Twitter.
+        </h2>
+      </div>
+      <a href="#form" class="font-mono text-sm text-mint underline-slide">APPLY FOR A SEAT →</a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <!-- Card 1 -->
+      <div class="feat-card bg-panel border border-border rounded-xl p-8 relative overflow-hidden">
+        <div class="font-mono text-xs text-dim mb-8">[ 001 ]</div>
+        <!-- Candle SVG -->
+        <svg viewBox="0 0 200 80" class="w-full h-20 mb-6" preserveAspectRatio="none">
+          <g>
+            <line x1="15" y1="20" x2="15" y2="70" stroke="#FFFFFF" stroke-width="1"/>
+            <rect x="10" y="35" width="10" height="25" fill="#FFFFFF"/>
+            <line x1="40" y1="25" x2="40" y2="65" stroke="#FFFFFF" stroke-width="1"/>
+            <rect x="35" y="30" width="10" height="25" fill="#FFFFFF"/>
+            <line x1="65" y1="35" x2="65" y2="60" stroke="#8E8E8E" stroke-width="1"/>
+            <rect x="60" y="40" width="10" height="15" fill="#8E8E8E"/>
+            <line x1="90" y1="15" x2="90" y2="55" stroke="#FFFFFF" stroke-width="1"/>
+            <rect x="85" y="20" width="10" height="30" fill="#FFFFFF"/>
+            <line x1="115" y1="10" x2="115" y2="45" stroke="#FFFFFF" stroke-width="1"/>
+            <rect x="110" y="15" width="10" height="25" fill="#FFFFFF"/>
+            <line x1="140" y1="20" x2="140" y2="50" stroke="#FFFFFF" stroke-width="1"/>
+            <rect x="135" y="22" width="10" height="22" fill="#FFFFFF"/>
+            <line x1="165" y1="5" x2="165" y2="40" stroke="#FFFFFF" stroke-width="1"/>
+            <rect x="160" y="8" width="10" height="25" fill="#FFFFFF"/>
+          </g>
+        </svg>
+        <h3 class="font-serif text-2xl mb-3">The DEXVision Playbook</h3>
+        <p class="text-dim text-sm leading-relaxed">
+          The exact 7-setup strategy stack our desk uses — entries, stop placement,
+          invalidation, and partial targets. Backtested on 4 years of BTC/ETH/SOL perps.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feat-card bg-panel border border-border rounded-xl p-8 relative overflow-hidden">
+        <div class="font-mono text-xs text-dim mb-8">[ 002 ]</div>
+        <!-- Liquidation heatmap mock -->
+        <div class="h-20 mb-6 flex items-end gap-1">
+          <div class="flex-1 bg-white/20 h-[20%] rounded-sm"></div>
+          <div class="flex-1 bg-white/35 h-[35%] rounded-sm"></div>
+          <div class="flex-1 bg-white/55 h-[50%] rounded-sm"></div>
+          <div class="flex-1 bg-white/90 h-[90%] rounded-sm"></div>
+          <div class="flex-1 bg-white/60 h-[55%] rounded-sm"></div>
+          <div class="flex-1 bg-white/40 h-[40%] rounded-sm"></div>
+          <div class="flex-1 bg-white/30 h-[65%] rounded-sm"></div>
+          <div class="flex-1 bg-white/25 h-[85%] rounded-sm"></div>
+          <div class="flex-1 bg-white/20 h-[45%] rounded-sm"></div>
+          <div class="flex-1 bg-white/15 h-[30%] rounded-sm"></div>
+        </div>
+        <h3 class="font-serif text-2xl mb-3">Live Signals &amp; Liquidity Maps</h3>
+        <p class="text-dim text-sm leading-relaxed">
+          Real-time alerts when our internal scanner flags a high-conviction setup —
+          with liquidation clusters, funding-rate extremes, and orderbook imbalance levels
+          pre-marked.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feat-card bg-panel border border-border rounded-xl p-8 relative overflow-hidden">
+        <div class="font-mono text-xs text-dim mb-8">[ 003 ]</div>
+        <!-- Risk curve -->
+        <svg viewBox="0 0 200 80" class="w-full h-20 mb-6" preserveAspectRatio="none">
+          <path d="M 0 70 Q 50 60, 100 40 T 200 10" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+          <path d="M 0 70 Q 50 60, 100 40 T 200 10 L 200 80 L 0 80 Z" fill="url(#grad1)" opacity="0.3"/>
+          <defs>
+            <linearGradient id="grad1" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h3 class="font-serif text-2xl mb-3">Institutional Risk Engine</h3>
+        <p class="text-dim text-sm leading-relaxed">
+          Our proprietary position-sizing calculator. Never blow an account again —
+          fixed-fractional, volatility-adjusted sizing and drawdown caps enforced
+          at the desk level.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feat-card bg-panel border border-border rounded-xl p-8 relative overflow-hidden">
+        <div class="font-mono text-xs text-dim mb-8">[ 004 ]</div>
+        <div class="h-20 mb-6 flex items-center justify-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center font-mono text-xs text-mint">JD</div>
+          <div class="w-10 h-10 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center font-mono text-xs text-mint">SK</div>
+          <div class="w-10 h-10 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center font-mono text-xs text-mint">MR</div>
+          <div class="w-10 h-10 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center font-mono text-xs text-mint">+</div>
+        </div>
+        <h3 class="font-serif text-2xl mb-3">The Desk (Private Community)</h3>
+        <p class="text-dim text-sm leading-relaxed">
+          Direct access to the DEXVision floor — 400+ traders, daily market briefings,
+          live trade callouts, and post-session reviews. No lurkers, no noise.
+        </p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="feat-card bg-panel border border-border rounded-xl p-8 relative overflow-hidden">
+        <div class="font-mono text-xs text-dim mb-8">[ 005 ]</div>
+        <div class="h-20 mb-6 relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full h-1 bg-border rounded-full">
+              <div class="h-1 bg-mint rounded-full" style="width:72%"></div>
+            </div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-between font-mono text-[10px] text-dim">
+            <span>$0</span><span class="text-mint">$100K</span><span>$500K+</span>
+          </div>
+        </div>
+        <h3 class="font-serif text-2xl mb-3">Funded Account Fast-Track</h3>
+        <p class="text-dim text-sm leading-relaxed">
+          We prep you to pass prop-firm challenges (FTMO, MyForexFunds, etc.) — then
+          scale you to $500K+ in funded capital without risking your own.
+        </p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="feat-card bg-panel border border-border rounded-xl p-8 relative overflow-hidden">
+        <div class="font-mono text-xs text-dim mb-8">[ 006 ]</div>
+        <div class="h-20 mb-6 flex items-center justify-center">
+          <div class="relative">
+            <div class="w-16 h-16 rounded-full border-2 border-mint/40"></div>
+            <div class="absolute inset-0 w-16 h-16 rounded-full border-2 border-transparent border-t-mint animate-spin" style="animation-duration:3s"></div>
+            <div class="absolute inset-0 flex items-center justify-center font-mono text-[10px] text-mint">1:1</div>
+          </div>
+        </div>
+        <h3 class="font-serif text-2xl mb-3">1-on-1 With The Founder</h3>
+        <p class="text-dim text-sm leading-relaxed">
+          Bi-weekly private calls to audit your journal, review your trades, and
+          hand you the next 2-week progression plan. No cohort. Just you.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS / TESTIMONIALS ============ -->
+<section id="results" class="relative py-28 border-t border-border">
+  <div class="max-w-7xl mx-auto px-6 md:px-10">
+    <div class="mb-20 max-w-3xl">
+      <div class="section-label mb-4">[ 03 / Results ]</div>
+      <h2 class="display text-4xl md:text-6xl leading-tight">
+        Others who joined and
+        <span class="display-i text-mint">reaped the rewards.</span>
+      </h2>
+      <p class="text-dim text-lg mt-5">
+        Just a handful of verified P&amp;L screenshots from our members.
+        All results audited through broker statements.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-12 gap-6">
+      <!-- Feature testimonial -->
+      <div class="md:col-span-7 bg-panel border border-border rounded-xl p-8 md:p-10 relative overflow-hidden">
+        <div class="grid-bg-fine absolute inset-0 opacity-30"></div>
+        <div class="relative">
+          <div class="flex items-start justify-between mb-8">
+            <div>
+              <div class="section-label mb-2">CASE STUDY · 01</div>
+              <div class="font-serif text-2xl">Marcus R.</div>
+              <div class="text-dim font-mono text-xs mt-1">23 y/o · London, UK · 60 days in</div>
+            </div>
+            <div class="text-right">
+              <div class="font-mono text-xs text-dim">ACCOUNT GROWTH</div>
+              <div class="font-serif text-4xl text-mint">+684%</div>
+            </div>
+          </div>
+
+          <!-- Equity curve -->
+          <svg viewBox="0 0 400 120" class="w-full mb-8" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="eq1" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M 0 100 L 30 98 L 60 105 L 90 90 L 120 85 L 150 70 L 180 75 L 210 55 L 240 40 L 270 45 L 300 30 L 330 25 L 360 15 L 400 8"
+                  stroke="#FFFFFF" stroke-width="2" fill="none"/>
+            <path d="M 0 100 L 30 98 L 60 105 L 90 90 L 120 85 L 150 70 L 180 75 L 210 55 L 240 40 L 270 45 L 300 30 L 330 25 L 360 15 L 400 8 L 400 120 L 0 120 Z"
+                  fill="url(#eq1)"/>
+            <!-- Grid lines -->
+            <g stroke="#1F2428" stroke-width="0.5">
+              <line x1="0" y1="30" x2="400" y2="30"/>
+              <line x1="0" y1="60" x2="400" y2="60"/>
+              <line x1="0" y1="90" x2="400" y2="90"/>
+            </g>
+          </svg>
+
+          <p class="text-off text-lg leading-relaxed mb-6">
+            "I was down $14K from 18 months of revenge-trading on Binance. Two weeks into
+            DEXVision I stopped averaging into losers. By day 60 I was up
+            <span class="text-mint">$47,200</span> — more than I made in my previous year at my job."
+          </p>
+
+          <div class="flex items-center gap-6 pt-6 border-t border-border font-mono text-xs text-dim">
+            <div><span class="text-off">Starting</span> · $6,900</div>
+            <div><span class="text-off">Day 60</span> · $54,100</div>
+            <div><span class="text-mint">P&amp;L</span> +$47,200</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smaller testimonials column -->
+      <div class="md:col-span-5 space-y-6">
+        <div class="bg-panel border border-border rounded-xl p-7">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="font-serif text-xl">Priya N.</div>
+              <div class="text-dim font-mono text-[11px]">28 · Toronto, CA</div>
+            </div>
+            <div class="font-serif text-2xl text-mint">+$28,400</div>
+          </div>
+          <p class="text-dim text-sm leading-relaxed">
+            "Passed my 100K FTMO challenge on the first try using the DEXVision
+            risk engine. Never thought I'd hear 'funded trader' next to my name."
+          </p>
+          <div class="text-[11px] font-mono text-dim mt-3">42 days in · win rate 71%</div>
+        </div>
+
+        <div class="bg-panel border border-border rounded-xl p-7">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="font-serif text-xl">Dmitri K.</div>
+              <div class="text-dim font-mono text-[11px]">34 · Berlin, DE</div>
+            </div>
+            <div class="font-serif text-2xl text-mint">+$112,600</div>
+          </div>
+          <p class="text-dim text-sm leading-relaxed">
+            "12 years of finance, still got schooled by crypto perps. The liquidation
+            map alone paid for the program 40x over."
+          </p>
+          <div class="text-[11px] font-mono text-dim mt-3">83 days in · avg R 3.2</div>
+        </div>
+
+        <div class="bg-panel border border-border rounded-xl p-7">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="font-serif text-xl">Yuki T.</div>
+              <div class="text-dim font-mono text-[11px]">26 · Tokyo, JP</div>
+            </div>
+            <div class="font-serif text-2xl text-mint">+$61,800</div>
+          </div>
+          <p class="text-dim text-sm leading-relaxed">
+            "I came in skeptical. The framework is actually different from every
+            YouTube guru I've tried. Rules are clear, edge is verifiable."
+          </p>
+          <div class="text-[11px] font-mono text-dim mt-3">71 days in · win rate 66%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DFY PROTOCOL ============ -->
+<section class="relative py-28 border-t border-border bg-ink">
+  <div class="absolute inset-0 grid-bg-fine opacity-40"></div>
+  <div class="relative max-w-7xl mx-auto px-6 md:px-10">
+    <div class="text-center mb-16">
+      <div class="section-label mb-4">[ 04 / The Protocol ]</div>
+      <h2 class="display text-4xl md:text-6xl max-w-4xl mx-auto leading-tight">
+        This is what we do
+        <span class="display-i text-mint">for you.</span>
+      </h2>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-panel border border-borderHi rounded-2xl overflow-hidden">
+      <div class="px-8 py-6 border-b border-border flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <div class="section-label">DONE-FOR-YOU · TIER S</div>
+          <div class="font-serif text-2xl mt-1">The 90-Day Desk Integration</div>
+        </div>
+        <div class="text-right">
+          <div class="text-dim text-xs font-mono">FOR BEST RESULTS</div>
+          <div class="text-mint font-mono text-xs mt-1">▲ 8 SEATS LEFT</div>
+        </div>
+      </div>
+
+      <div class="divide-y divide-border">
+        <div class="px-8 py-5 flex items-center gap-4">
+          <span class="w-6 h-6 rounded-full border border-mint text-mint flex items-center justify-center font-mono text-xs shrink-0">✓</span>
+          <span class="text-off">Complete strategy stack &amp; backtest vault <span class="text-dim">(done for you)</span></span>
+        </div>
+        <div class="px-8 py-5 flex items-center gap-4">
+          <span class="w-6 h-6 rounded-full border border-mint text-mint flex items-center justify-center font-mono text-xs shrink-0">✓</span>
+          <span class="text-off">Live signals piped to your Discord <span class="text-dim">(done for you)</span></span>
+        </div>
+        <div class="px-8 py-5 flex items-center gap-4">
+          <span class="w-6 h-6 rounded-full border border-mint text-mint flex items-center justify-center font-mono text-xs shrink-0">✓</span>
+          <span class="text-off">Risk engine + position-sizing calculator <span class="text-dim">(done for you)</span></span>
+        </div>
+        <div class="px-8 py-5 flex items-center gap-4">
+          <span class="w-6 h-6 rounded-full border border-mint text-mint flex items-center justify-center font-mono text-xs shrink-0">✓</span>
+          <span class="text-off">Prop-firm challenge prep &amp; placement <span class="text-dim">(done for you)</span></span>
+        </div>
+        <div class="px-8 py-5 flex items-center gap-4">
+          <span class="w-6 h-6 rounded-full border border-mint text-mint flex items-center justify-center font-mono text-xs shrink-0">✓</span>
+          <span class="text-off">Bi-weekly 1:1 with the DEXVision founder</span>
+        </div>
+        <div class="px-8 py-5 flex items-center gap-4">
+          <span class="w-6 h-6 rounded-full border border-mint text-mint flex items-center justify-center font-mono text-xs shrink-0">✓</span>
+          <span class="text-off">Private Desk community access &amp; live rooms</span>
+        </div>
+      </div>
+
+      <div class="px-8 py-6 bg-panel2 border-t border-border">
+        <a href="#form" class="btn-primary block w-full bg-mint text-ink font-bold text-center py-4 rounded-md tracking-wide">
+          APPLY FOR DFY TIER S  →
+        </a>
+        <div class="text-center font-mono text-[11px] text-dim mt-4 tracking-wider">
+          90-DAY PROFITABILITY GUARANTEE · OR YOU DON'T PAY
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VIDEO / SOCIAL PROOF ============ -->
+<section class="relative py-28 border-t border-border">
+  <div class="max-w-5xl mx-auto px-6 md:px-10 text-center">
+    <div class="section-label mb-4">[ 05 / Still Skeptical? ]</div>
+    <h2 class="display text-4xl md:text-6xl mb-4">
+      Still wondering if this is
+      <span class="display-i text-mint">real?</span>
+    </h2>
+    <p class="text-dim text-lg mb-12">Watch a 7-min desk walkthrough from the founder.</p>
+
+    <div class="relative aspect-video bg-panel border border-borderHi rounded-2xl overflow-hidden group cursor-pointer">
+      <!-- Chart background mockup -->
+      <div class="absolute inset-0 grid-bg-fine opacity-50"></div>
+      <svg viewBox="0 0 800 450" class="absolute inset-0 w-full h-full opacity-30" preserveAspectRatio="none">
+        <path d="M 0 300 L 50 290 L 100 310 L 150 270 L 200 260 L 250 230 L 300 240 L 350 200 L 400 180 L 450 190 L 500 150 L 550 140 L 600 110 L 650 100 L 700 80 L 800 60"
+              stroke="#FFFFFF" stroke-width="2" fill="none"/>
+      </svg>
+      <!-- Play button -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-20 h-20 rounded-full bg-mint flex items-center justify-center shadow-2xl group-hover:scale-110 transition">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#0A0B0C">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </div>
+      <!-- Video meta overlay -->
+      <div class="absolute bottom-6 left-6 right-6 flex items-center justify-between font-mono text-xs">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-off pulse-dot"></span>
+          <span class="text-off">FOUNDER WALKTHROUGH</span>
+        </div>
+        <span class="text-dim">07:42</span>
+      </div>
+    </div>
+
+    <a href="#form" class="btn-primary inline-block mt-12 bg-mint text-ink font-bold text-base px-8 py-4 rounded-md tracking-wide">
+      APPLY FOR A SEAT →
+    </a>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="relative py-28 border-t border-border">
+  <div class="max-w-4xl mx-auto px-6 md:px-10">
+    <div class="mb-14">
+      <div class="section-label mb-4">[ 06 / FAQ ]</div>
+      <h2 class="display text-4xl md:text-6xl">
+        Your questions,
+        <span class="display-i text-mint">answered.</span>
+      </h2>
+    </div>
+
+    <div class="space-y-3">
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">Who is DEXVision for?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          Two archetypes: (1) Total beginners who want to skip the 3–5 years of blown accounts
+          and start with a verified framework. (2) Existing traders who've stalled — no clear edge,
+          inconsistent P&amp;L, or stuck in the prop-firm failure loop. If you want a "get rich
+          quick" pill, click away. This is a real craft.
+        </div>
+      </details>
+
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">Do I need trading experience?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          No. ~40% of our members had never placed a leveraged trade before joining. The
+          DFY protocol assumes zero. That said, you should be comfortable sitting at a screen,
+          reading data, and following a rulebook. It's structured, not mystical.
+        </div>
+      </details>
+
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">How much capital do I need to start?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          $3,000 minimum on your personal account for the first 30 days — purely for the reps.
+          After that, most members transition to prop-firm funded capital
+          ($25K → $100K → $500K) and trade with the firm's money, not yours. We prep you
+          for those challenges as part of the protocol.
+        </div>
+      </details>
+
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">How long until I see results?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          Median student breaks even by day 27 and is net-profitable by day 45.
+          "Consistent 6-figure months" is typically day 120+ territory. The 90-day
+          window is about building the <span class="text-off">system</span> — not just one lucky run.
+        </div>
+      </details>
+
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">How is this different from every other "trading guru"?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          Three things. <span class="text-off">One</span> — we show live P&amp;L from the founder's account,
+          not cherry-picked wins. <span class="text-off">Two</span> — every setup has documented
+          statistical edge (win rate, avg R, sample size), not vibes. <span class="text-off">Three</span>
+          — we have a profitability guarantee: you're unprofitable at day 90, you get a full refund.
+          No other "trading course" will put their cash on the line like that. Go check.
+        </div>
+      </details>
+
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">What exactly do I get inside?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          The DEXVision Playbook (7 strategies), the live signal feed, the risk engine,
+          the liquidation map scanner, the Desk community, bi-weekly 1:1s with the founder,
+          and prop-firm placement. Everything's DFY — we set you up, you run the reps.
+        </div>
+      </details>
+
+      <details class="group bg-panel border border-border rounded-xl open:border-borderHi">
+        <summary class="list-none cursor-pointer p-6 flex items-center justify-between gap-6">
+          <span class="font-serif text-xl md:text-2xl text-off">Is this legal / regulated?</span>
+          <span class="faq-chev text-mint font-mono text-2xl shrink-0">+</span>
+        </summary>
+        <div class="px-6 pb-6 text-dim leading-relaxed">
+          DEXVision is an educational program. We don't hold client funds, execute trades,
+          or give regulated financial advice. You trade your own account on exchanges of your
+          choice. Trading crypto perpetuals involves substantial risk — never use money you can't
+          afford to lose.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOTTOM CTA ============ -->
+<section class="relative py-28 border-t border-border bg-ink overflow-hidden">
+  <div class="absolute inset-0 mint-glow"></div>
+  <div class="absolute inset-0 grid-bg-fine opacity-40"></div>
+
+  <div class="relative max-w-3xl mx-auto px-6 md:px-10 text-center">
+    <div class="section-label mb-4">[ 07 / Apply ]</div>
+    <h2 class="display text-4xl md:text-6xl mb-4">
+      Ready to trade
+      <span class="display-i text-mint">like a desk?</span>
+    </h2>
+    <p class="text-dim text-lg mb-10 max-w-xl mx-auto">
+      Strategy calls booked within 48 hours of application.
+      Cohort 07 is capped at 12 seats.
+    </p>
+
+    <a href="#form" class="btn-primary inline-block bg-mint text-ink font-bold text-base px-10 py-4 rounded-md tracking-wide">
+      APPLY FOR A SEAT →
+    </a>
+
+    <div class="text-center font-mono text-[11px] text-dim mt-6 tracking-wider">
+      NO SPAM · NO CARD REQUIRED · APPLICATION ONLY
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative border-t border-border py-16">
+  <div class="max-w-7xl mx-auto px-6 md:px-10">
+    <div class="grid md:grid-cols-2 gap-10 mb-12">
+      <div>
+        <a href="#hero" class="flex items-center gap-2.5 mb-4">
+          <img src="data:image/png;base64,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" alt="DEXVision" class="h-12 w-12" />
+          <span class="font-serif text-xl text-off">DEXVision<span class="text-mint">.io</span></span>
+        </a>
+        <p class="text-dim text-sm leading-relaxed max-w-xs">
+          We help beginners trade perpetuals like seasoned desk traders — without years of blown accounts.
+        </p>
+      </div>
+      
+      <div>
+        <div class="section-label mb-4">Contact</div>
+        <div class="space-y-2 text-sm text-dim font-mono">
+          <div>hello@dexvision.io</div>
+          <div>+1 647-363-7675</div>
+          <div class="pt-2 text-[11px]">London, ON · Canada</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-8 border-t border-border flex items-center justify-between flex-wrap gap-4 font-mono text-[11px] text-dim">
+      <div>© 2026 DEXVision — a Growthlink property. All rights reserved.</div>
+      <div class="flex items-center gap-6">
+        <a href="#" class="hover:text-off underline-slide">Privacy</a>
+        <a href="#" class="hover:text-off underline-slide">Terms</a>
+        <a href="#" class="hover:text-off underline-slide">Risk Disclaimer</a>
+      </div>
+    </div>
+
+    <!-- Risk disclaimer -->
+    <div class="mt-10 pt-8 border-t border-border text-[11px] text-dim leading-relaxed font-mono">
+      <span class="text-crimson">RISK DISCLOSURE:</span> Trading cryptocurrency perpetuals involves substantial risk of loss
+      and is not suitable for every investor. Past performance of members is not indicative of future results.
+      Testimonials reflect individual experiences and may not be typical. DEXVision does not execute trades
+      on your behalf and is not a registered investment advisor. You are solely responsible for your trades.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Smooth-scroll all in-page anchor links with offset for sticky nav
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#' || targetId.length < 2) return;
+
+      const target = document.querySelector(targetId);
+      if (!target) return;
+
+      e.preventDefault();
+      const navHeight = 80; // offset for sticky nav
+      const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+
+      window.scrollTo({ top, behavior: 'smooth' });
+
+      // Update URL hash without jumping
+      history.pushState(null, '', targetId);
+    });
+  });
+</script>
+
+</body>
+</html>
